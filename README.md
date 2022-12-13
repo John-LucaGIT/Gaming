@@ -8,5 +8,5 @@ Scripts from gaming projects
 ## [AutoScooter Event - 2018](https://github.com/John-LucaGIT/Gaming/tree/main/autoscooter)
 - A bumper cars mini game for a German Multi Theft Auto Gameserver, players must try to eliminate other players in a kill zone.
 
-## [Service Panel - 2018]https://github.com/John-LucaGIT/Gaming/tree/main/servicepanel)
+## [Service Panel - 2018](https://github.com/John-LucaGIT/Gaming/tree/main/servicepanel)
 - A service panel for a German Multi Theft Auto Reallife Gameserver allowing players to call emergency services on their given location. Alerts are generated with player location and description of emergency.
