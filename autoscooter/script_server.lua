@@ -1,13 +1,34 @@
-----------------------Info---------------------
--- Author: John-Luca -  All rights reserved
------------------------------------------------
+
+---------Info----------
+-- Author: [CoA]Cyber  
+-----------------------
+
+function getAdminLevel(player)
+	admin = call ( getResourceFromName("vio"), "vioGetElementData", player, "adminlvl")
+	if admin then
+		return admin
+    else
+        return 0
+	end
+end
+
+function scooterBlip(player)
+	peter = getElementDimension(getRootElement())
+	if peter == 0 then
+		createBlip(-1717.7373046875,134.1904296875,3.5546875,45,2,255,0,0,255,0,180)
+		if getAdminLevel(player) >= 5 then 
+			addCommandHandler("reloadcyberblips",scooterBlip)
+		end
+	end
+end
+addEventHandler("onPlayerJoin",getRootElement(),scooterBlip)
+	
 
 local pedderby = createPed(37,-1715.6298828125,134.529296875,3.5546875,90)
 setElementFrozen (pedderby,true)
-
 ---------------------------------------Random ColShapes ---------------------------------------
 
-rc1 = createColCuboid ( -1711.0933837891,204.24356079102,1,10.4,9.7,5)
+rc1 = createColCuboid ( -1711.0933837891,204.24356079102,1,10.4,9.7,5) 
 rc2 = createColCuboid ( -1698.3857421875,162.11332702637,1,10.6,4.7,5)
 rc3 = createColCuboid ( -1689.4697265625,181.3115234375,1,9.8,10.5,5)
 
@@ -57,9 +78,16 @@ local objectCoordinates = {
 		{-1687.1999511719,181.5,-0.12600000202656,90,0,0},
 	},
 }
+local JoinedPlayer = {
+    {false,"Frei"},
+    {false,"Frei"},
+    {false,"Frei"},
+    {false,"Frei"},
+    {false,"Frei"},
+    {false,"Frei"},
+}
 
-
-local scooter = {}
+local scooter = {} 
 local scootercolor = {
     {255,87,51,54,255,0},
     {54,255,0,255,87,51},
@@ -71,13 +99,19 @@ local team = {
 	{-1707.6796875,240.5009765625,2.5,0,0,180.08792114258,246,0,255},
 }
 
-
+function teleportToEvent(player)
+	local admin = getPlayerName(player)
+	if admin == "[CoA]Cyber" then 
+		setElementPosition(player,-1715.6298828125,134.529296875,3.5546875)
+	end 
+end
+addCommandHandler("gotoscooter",teleportToEvent)
 
 function isEventHandlerAdded( sEventName, pElementAttachedTo, func )
-    if
-        type( sEventName ) == 'string' and
-        isElement( pElementAttachedTo ) and
-        type( func ) == 'function'
+    if 
+        type( sEventName ) == 'string' and 
+        isElement( pElementAttachedTo ) and 
+        type( func ) == 'function' 
     then
         local aAttachedFunctions = getEventHandlers( sEventName, pElementAttachedTo )
         if type( aAttachedFunctions ) == 'table' and #aAttachedFunctions > 0 then
@@ -91,7 +125,7 @@ function isEventHandlerAdded( sEventName, pElementAttachedTo, func )
     return false
 end
 
-local dbx = 0
+local dbx = 0 
 timeractive = false
 
 function ChangeChallanges()
@@ -102,24 +136,25 @@ function ChangeChallanges()
 				removeEventHandler("onColShapeHit",randocol[dbx],killzone) -- removed den eventhandler wenn einer bereits vorhanden ist
 			end
 			dbx = math.random(#randocol) -- generiert eine random zahl von der tabelle randocol (1-3) und speichert diese in dbx
-			ChangeObject()
-			addEventHandler("onColShapeHit",randocol[dbx],killzone) -- fügt einen eventhandler hinzu
+			addEventHandler("onColShapeHit",randocol[dbx],killzone) -- fügt einen eventhandler hinzu 
+					ChangeObject()
 		end,15000,0) -- beendet timer
 	end
 end -- beendet changechallanges
 
 local objects = {}
 
+
 function ChangeObject()
 	for i = 1, #objects do
-		if objects[i] and isElement (objects[i]) then
+		if objects[i] and isElement (objects[i]) then 
 		destroyElement(objects[i])
 		end
 	end
 	if dbx == 0 then
 		dbx = 1
 	end
-	for i = 1, #objectCoordinates[dbx] do
+	for i = 1, #objectCoordinates[dbx] do 
 		objects[i] = createObject(mID,objectCoordinates[dbx][i][1],objectCoordinates[dbx][i][2],objectCoordinates[dbx][i][3],objectCoordinates[dbx][i][4],objectCoordinates[dbx][i][5],objectCoordinates[dbx][i][6])
 	end
 end
@@ -127,7 +162,7 @@ end
 function mapend (Element,Dim,Player)
     if Element and Dim then
         if getElementType ( Element ) == "vehicle" then
-            if getVehicleOccupant(Element) then
+            if getVehicleOccupant(Element) then 
                 local Player = getVehicleOccupant(Element)
 				if scooter[getPlayerName(Player)] == Element then
 					destroyElement(scooter[getPlayerName(Player)])
@@ -143,7 +178,7 @@ addEventHandler("onColShapeLeave",col,mapend)
 function killzone (Element,Dim)
     if Element and Dim then
         if getElementType ( Element ) == "vehicle" then
-            if getVehicleOccupant(Element) then
+            if getVehicleOccupant(Element) then 
                 local Player = getVehicleOccupant(Element)
 				if scooter[getPlayerName(Player)] == Element then
 					destroyElement(scooter[getPlayerName(Player)])
@@ -163,30 +198,37 @@ addEventHandler("onColShapeHit",col3,killzone)
 
 
 function drawautoscooterwindow (button,state,clickedElement)
-	if button == "left" and state == "down" then
+	if button == "left" and state == "down" then 
 		px,py,pz = getElementPosition(source)
 		vx,vy,vz = getElementPosition(pedderby)
 		if getDistanceBetweenPoints3D(px,py,pz,vx,vy,vz) < 5 then
-			if clickedElement == pedderby then
+			if clickedElement == pedderby then 
 			triggerClientEvent (source,"clickclick",source)
 			end
-		end
+		end 
 	end
 end
 addEventHandler ("onPlayerClick",getRootElement(),drawautoscooterwindow)
 
 function enterscooter(Element)
-	if Element then
+	if Element then 
 		if getElementType (Element) == "player" then
-			if not scooter [getPlayerName(Element)] then
-				ChangeChallanges()
-				local tms = math.random(1,#team)
-				setElementPosition (Element,team[tms][1],team[tms][2],team[tms][3])
-				scooter[getPlayerName(Element)] = createVehicle (539,team[tms][1],team[tms][2],team[tms][3],team[tms][4],team[tms][5],team[tms][6])
-				warpPedIntoVehicle (Element,scooter[getPlayerName(Element)])
-				setVehicleDamageProof (scooter[getPlayerName(Element)],true)
-				showCursor(false)
-				setVehicleColor (scooter[getPlayerName(Element)],team[tms][6],team[tms][8],team[tms][9])
+			if not scooter [getPlayerName(Element)] then 
+				local money = vioGetElementData(client,"money")
+				local price = 50
+				if money >= price then
+					ChangeChallanges()
+					local tms = math.random(1,#team)
+					setElementPosition (Element,team[tms][1],team[tms][2],team[tms][3])
+					scooter[getPlayerName(Element)] = createVehicle (539,team[tms][1],team[tms][2],team[tms][3],team[tms][4],team[tms][5],team[tms][6])
+					warpPedIntoVehicle (Element,scooter[getPlayerName(Element)])
+					setVehicleDamageProof (scooter[getPlayerName(Element)],true)
+					showCursor(false)
+					setVehicleColor (scooter[getPlayerName(Element)],team[tms][6],team[tms][8],team[tms][9])
+					vioSetElementData(client,"money",money - price)
+				else 
+					outputChatBox("Du hast nicht genügend Geld!",Element,255,0,0)
+				end
 			else
 				outputChatBox ("Du hast bereits einen Scooter!",Element,255,0,0)
 			end
@@ -195,15 +237,6 @@ function enterscooter(Element)
 end
 addEvent ("reinda",true)
 addEventHandler("reinda",getRootElement(),enterscooter)
-
--- function scootercost ()
--- 	if enterscooter (true) then
--- 		if vioGetElementData(player,"money") >= 50 then
--- 		vioSetElementData(player,"money",vioGetElementData(player,"money")-50)
--- 		end
--- 	end
--- end
--- addEventHandler (scootercost)--
 
 function stopenter (player,seat,jacked)
 	if (scooter [getPlayerName(jacked)]) then
@@ -231,8 +264,38 @@ end
 addEventHandler("onVehicleExit",getRootElement(),DelScooter)
 
 
+function JoinFreeSlot()
+local behinderung = getPlayerName(client)
+triggerClientEvent(getRootElement(),"synctable",getRootElement(),JoinedPlayer,behinderung)
+    for i =1, #JoinedPlayer do
+        if vioGetElementData(getRootElement(),"JoinedScooter") ~= true then
+            if JoinedPlayer[i][1] == false then
+                JoinedPlayer[i][1] = true
+                JoinedPlayer[i][2] = behinderung
+                vioSetElementData(getRootElement(),"JoinedScooter",true)
+                return true
+            end
+        end
+    end
+	
+end
+addEvent("sync",true)
+addEventHandler("sync",getRootElement(),JoinFreeSlot)
 
-
+function placeBet(player,SelectedPlayerInList,bettingMoney)
+	if player then 
+		local money = vioGetElementData(client,"money")
+		if money >= bettingMoney then
+			vioSetElementData(client,"money",money - bettingMoney)
+			outputChatBox("Du hast erfolgreich "..bettingMoney.."$ auf Player "..tostring(SelectedPlayerInList).." gesetzt!")
+			vioSetElementData(client,"placedBet",bettingMoney)
+		else
+		outputChatBox("Du hast nicht genügend Geld!",player)
+		end
+	end
+end
+addEvent("setPlayerBet",true)
+addEventHandler("setPlayerBet",getRootElement(),placeBet)
 
 
 
