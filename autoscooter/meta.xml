@@ -1,0 +1,11 @@
+<meta>
+
+<info name="autoscooter" type="script" author="[CoA]Cyber"/>
+
+<script type="server" src="script_server.lua"/>
+
+<script type="client" src="script_client.lua"/>
+
+<file src="Images/bumpercar.png"/>
+
+</meta>
